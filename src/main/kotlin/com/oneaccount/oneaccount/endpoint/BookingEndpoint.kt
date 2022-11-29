@@ -3,6 +3,11 @@ package com.oneaccount.oneaccount.endpoint
 import com.oneaccount.oneaccount.model.Booking
 import com.oneaccount.oneaccount.model.Film
 import com.oneaccount.oneaccount.repository.BookingRepository
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.Size
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,6 +16,7 @@ import java.time.LocalDate
 import java.util.*
 
 @RestController
+@Validated
 class BookingEndpoint(val bookingRepository: BookingRepository) {
 
     /**
@@ -27,7 +33,11 @@ class BookingEndpoint(val bookingRepository: BookingRepository) {
     }
 
     @PostMapping("/createBooking/{filmId}/{date}/{seat}")
-    fun createBooking(@PathVariable filmId: Int, @PathVariable date: LocalDate, @PathVariable seat: Int): Booking {
+    fun createBooking(
+        @PathVariable filmId: Int, @PathVariable date: LocalDate,
+        @Min(1) @Max(100)
+        @PathVariable seat: Int
+    ): Booking {
         return bookingRepository.save(Booking(film = Film(id = filmId), date = date, seat = seat))
     }
 

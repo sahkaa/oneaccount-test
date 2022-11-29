@@ -12,5 +12,4 @@ interface BookingRepository : JpaRepository<Booking, Int> {
 
     @Query("select b from Booking b where b.date = ?1")
     fun findAllByDate(@Param("date") date: LocalDate): List<Booking>
-
 }
